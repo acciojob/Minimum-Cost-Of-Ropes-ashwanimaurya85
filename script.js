@@ -1,29 +1,39 @@
+// Compare function for sorting
+function compare(a, b) {
+  if (a < b) {
+    return -1;
+  } else if (a > b) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+// Main function to calculate the minimum cost
 function calculateMinCost() {
-  let str = document.getElementById('rope-lengths').value;
-  
-  if (!str) {
-    alert("Please enter rope lengths.");
-    return;
-  }
+  // Get the input string, split it, and convert it into an array of integers
+  let str = document.getElementById('rope-lengths').value.split(",");
+  let arr = str.map((str) => parseInt(str));
 
-  let arr = str.split(",").map(str => parseInt(str));
-
-  if (arr.length < 2) {
-    alert("At least two rope lengths are required.");
-    return;
-  }
-
+  // Initialize the total cost
   let total = 0;
-  arr = arr.sort((a, b) => a - b);
 
+  // Sort the array using the compare function
+  arr = arr.sort(compare);
+
+  // Combine the two smallest lengths until only one rope remains
   while (arr.length >= 2) {
     let sum = arr[0] + arr[1];
-    let rem = [sum, ...arr.slice(2)];
-    rem = rem.sort((a, b) => a - b);
-    arr = rem;
-    total += sum;
+    let rem = [sum];
+    for (let k = 2; k < arr.length; k++) {
+      rem.push(arr[k]);
+    }
+    rem = rem.sort(compare);
+    arr = [...rem];
+    total = total + sum;
   }
 
+  // Display the total cost in the 'result' element
   let result = document.getElementById('result');
   result.innerHTML = total;
 }
